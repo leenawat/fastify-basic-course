@@ -3,7 +3,7 @@ import * as knex from 'knex'
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { TestModel } from '../models/test';
 
-export default async function index(fastfiy: FastifyInstance) {
+export default async function test(fastfiy: FastifyInstance) {
     const db: knex = fastfiy.knex
     const testModel = new TestModel();
     fastfiy.get('/', async (request: FastifyRequest, reply: FastifyReply) => {

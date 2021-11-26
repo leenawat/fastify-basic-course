@@ -50,4 +50,42 @@ export default async function users(fastfiy: FastifyInstance) {
             reply.code(500).send({ ok: false, error: error.message })
         }
     })
+
+    // UPDATE
+    fastfiy.put('/:userId', async (request: FastifyRequest, reply: FastifyReply) => {
+        const body: any = request.body;
+        const params: any = request.params;
+
+        const { password, firstName, lastName } = body;
+
+        const userId = params.userId;
+
+        try {
+            const data: any = {};
+            data.first_name = firstName;
+            data.last_name = lastName;
+            if (password) {
+                data.password = crypto.createHash('md5').update(password).digest('hex')
+            }
+            await userModel.update(db, userId, data);
+            reply.send({ ok: true })
+        } catch (error: any) {
+            console.log(error)
+            reply.code(500).send({ ok: false, error: error.message })
+        }
+    })
+
+     // DELETE
+     fastfiy.delete('/:userId', async (request: FastifyRequest, reply: FastifyReply) => {
+        const params: any = request.params;
+        const userId = params.userId;
+
+        try {
+            await userModel.delete(db, userId);
+            reply.send({ ok: true })
+        } catch (error: any) {
+            console.log(error)
+            reply.code(500).send({ ok: false, error: error.message })
+        }
+    })
 }
